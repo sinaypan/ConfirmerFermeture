@@ -2,18 +2,34 @@
 // On fait donc l'inverse : dès qu'un onglet vient d'être fermé, un bandeau
 // "Onglet fermé · Rouvrir" apparaît dans la page active (toast.js). "Rouvrir"
 // remet l'onglet à sa place, avec son historique, via l'API sessions.
+// Les fermetures qui se suivent s'ajoutent au même bandeau, une ligne chacune,
+// et le bandeau suit l'onglet actif jusqu'à la fin du décompte.
 // Si la page active n'accepte pas de script (nouvel onglet, chrome://...),
 // on retombe sur une petite fenêtre (confirm.html).
 
-const DIALOG_SIZE = { width: 440, height: 250 };
+const DIALOG_SIZE = { width: 460, height: 130 };
+const DURATION_MS = 7000;
 const BULK_WINDOW_MS = 120;
 const MAX_AGE_S = 5;
-const MAX_ASKED_IDS = 30;
+const MAX_ASKED_IDS = 100;
 const RESTORABLE = /^(https?|file):/;
 
+// Onglets proposés, du plus récent au plus ancien : { sessionId, title, url, batch }.
+// Cet état disparaît si le service worker s'endort, ce qui demande bien plus
+// d'inactivité que la durée d'un décompte.
+let pending = [];
+let expiresAt = 0;
 let lastRemovedAt = 0;
-let generation = 0;
+let currentBatch = 0;
+let lastWindowId = null;
 let toastTabId = null;
+
+// Les évènements arrivent groupés (fermeture + changement d'onglet) : on les
+// traite un par un pour que la liste et l'affichage restent cohérents.
+let queue = Promise.resolve();
+const enqueue = (task) => {
+  queue = queue.then(task).catch(() => {});
+};
 
 const updateBadge = async () => {
   const { enabled } = await chrome.storage.local.get({ enabled: true });
@@ -27,6 +43,30 @@ const restoreTab = (sessionId, url) =>
     if (url) chrome.tabs.create({ url });
   });
 
+const activePending = () => {
+  if (Date.now() >= expiresAt) pending = [];
+  return pending;
+};
+
+// Une ligne par onglet ; les onglets fermés d'un même geste partagent une ligne.
+const currentState = () => {
+  const rows = [];
+  for (const { batch, ...tab } of activePending()) {
+    const last = rows.at(-1);
+    if (last?.batch === batch) last.tabs.push(tab);
+    else rows.push({ batch, tabs: [tab] });
+  }
+  return { rows, remainingMs: Math.max(0, expiresAt - Date.now()), durationMs: DURATION_MS };
+};
+
+const openDialogId = async () => {
+  const { dialogWindowId } = await chrome.storage.session.get('dialogWindowId');
+  if (dialogWindowId === undefined) return null;
+  // La fenêtre se ferme aussi d'elle-même (clic ailleurs, fin du décompte).
+  const dialog = await chrome.windows.get(dialogWindowId).catch(() => null);
+  return dialog ? dialogWindowId : null;
+};
+
 const closeDialog = async () => {
   const { dialogWindowId } = await chrome.storage.session.get('dialogWindowId');
   if (dialogWindowId === undefined) return;
@@ -34,108 +74,173 @@ const closeDialog = async () => {
   await chrome.windows.remove(dialogWindowId).catch(() => {});
 };
 
+const hideToast = () => {
+  if (toastTabId === null) return;
+  chrome.tabs.sendMessage(toastTabId, { type: 'hide-closed-tabs' }).catch(() => {});
+  toastTabId = null;
+};
+
 const hidePrompt = () => {
-  if (toastTabId !== null) {
-    chrome.tabs.sendMessage(toastTabId, { type: 'hide-closed-tab' }).catch(() => {});
-    toastTabId = null;
-  }
+  hideToast();
   return closeDialog();
 };
 
-const showToast = async (tabId, closedTab) => {
-  const message = {
-    type: 'show-closed-tab',
-    sessionId: closedTab.sessionId,
-    title: closedTab.title,
-    url: closedTab.url,
-  };
+const showToast = async (tabId, message) => {
   try {
     return (await chrome.tabs.sendMessage(tabId, message))?.shown === true;
   } catch {
     // Onglet ouvert avant l'installation de l'extension : toast.js n'y est pas encore.
   }
   try {
-    await chrome.scripting.executeScript({ target: { tabId }, files: ['toast.js'] });
+    await chrome.scripting.executeScript({ target: { tabId }, files: ['banner.js', 'toast.js'] });
     return (await chrome.tabs.sendMessage(tabId, message))?.shown === true;
   } catch {
     return false; // page protégée
   }
 };
 
-const openDialog = async (closedTab, windowId) => {
-  const parent = await chrome.windows.get(windowId).catch(() => null);
+const openDialog = async (windowId) => {
+  const parent = windowId === null ? null : await chrome.windows.get(windowId).catch(() => null);
   const position =
     parent && parent.state !== 'minimized'
       ? {
           left: Math.round(parent.left + (parent.width - DIALOG_SIZE.width) / 2),
-          top: Math.round(parent.top + (parent.height - DIALOG_SIZE.height) / 3),
+          // En haut de la fenêtre, là où le bandeau apparaît d'habitude.
+          top: Math.round(parent.top + 90),
         }
       : {};
 
-  const dialog = await chrome.windows.create({
-    url: chrome.runtime.getURL(`confirm.html?sid=${encodeURIComponent(closedTab.sessionId)}`),
-    type: 'popup',
-    focused: true,
-    ...DIALOG_SIZE,
-    ...position,
-  });
+  const create = (placement) =>
+    chrome.windows.create({
+      url: chrome.runtime.getURL('confirm.html'),
+      type: 'popup',
+      focused: true,
+      ...DIALOG_SIZE,
+      ...placement,
+    });
+  // Position refusée par Chrome (hors écran) : on le laisse placer la fenêtre.
+  const dialog = await create(position).catch(() => create({}));
   await chrome.storage.session.set({ dialogWindowId: dialog.id });
 };
 
-const promptForClosedTab = async (windowId, current) => {
-  const [{ enabled }, [session], { askedIds }] = await Promise.all([
+// Affiche la liste en cours dans l'onglet actif, ou retire tout s'il n'y a plus
+// rien à proposer. `fallback` : ouvrir la petite fenêtre si la page refuse le
+// bandeau. Réservé aux fermetures : un simple changement d'onglet ne doit pas
+// faire surgir une fenêtre.
+const render = async (windowId, { fallback }) => {
+  const state = currentState();
+  if (!state.rows.length) return hidePrompt();
+
+  const message = { type: 'show-closed-tabs', ...state };
+  const [activeTab] = await chrome.tabs.query(
+    windowId === null ? { active: true, lastFocusedWindow: true } : { active: true, windowId },
+  );
+  if (activeTab) {
+    if (toastTabId !== activeTab.id) hideToast();
+    if (await showToast(activeTab.id, message)) {
+      toastTabId = activeTab.id;
+      return closeDialog();
+    }
+    toastTabId = null;
+  }
+
+  if ((await openDialogId()) !== null) chrome.runtime.sendMessage(message).catch(() => {});
+  else if (fallback) await openDialog(windowId);
+};
+
+// Ajoute à la liste les onglets que Chrome vient d'enregistrer comme fermés.
+const collectClosedTabs = async (windowId, batch) => {
+  const [{ enabled }, sessions, { askedIds }] = await Promise.all([
     chrome.storage.local.get({ enabled: true }),
-    chrome.sessions.getRecentlyClosed({ maxResults: 1 }),
+    chrome.sessions.getRecentlyClosed(),
     chrome.storage.session.get({ askedIds: [] }),
   ]);
   if (!enabled) return;
 
-  const closedTab = session?.tab;
-  // Les pages internes (nouvel onglet, chrome://, extensions) ne sont pas concernées.
-  if (!closedTab || !RESTORABLE.test(closedTab.url ?? '')) return;
-  // L'onglet fermé n'a pas été enregistré par Chrome : l'entrée la plus
-  // récente est alors une ancienne fermeture, qu'il ne faut pas reproposer.
-  if (Date.now() / 1000 - session.lastModified > MAX_AGE_S) return;
-  // Même cas, pour une fermeture toute récente déjà proposée une fois.
-  if (askedIds.includes(closedTab.sessionId)) return;
+  const now = Date.now() / 1000;
+  const closed = sessions
+    // Les pages internes (nouvel onglet, chrome://, extensions) ne sont pas concernées.
+    .filter((session) => session.tab && RESTORABLE.test(session.tab.url ?? ''))
+    // Un onglet que Chrome n'enregistre pas laisse en tête d'anciennes
+    // fermetures : on écarte celles qui datent, et celles déjà proposées.
+    .filter((session) => now - session.lastModified <= MAX_AGE_S)
+    .map((session) => session.tab)
+    .filter((tab) => !askedIds.includes(tab.sessionId));
+  if (!closed.length) return;
 
-  const [activeTab] = await chrome.tabs.query({ active: true, windowId });
-  // Un autre onglet a été fermé entre-temps : cette demande est périmée.
-  if (current !== generation) return;
-
-  await hidePrompt();
-  chrome.storage.session.set({
-    askedIds: [...askedIds, closedTab.sessionId].slice(-MAX_ASKED_IDS),
+  await chrome.storage.session.set({
+    askedIds: [...askedIds, ...closed.map((tab) => tab.sessionId)].slice(-MAX_ASKED_IDS),
   });
-  if (activeTab) {
-    toastTabId = activeTab.id;
-    if (await showToast(activeTab.id, closedTab)) return;
-    toastTabId = null;
-  }
-  if (current !== generation) return;
-  await openDialog(closedTab, windowId);
+  activePending().unshift(
+    ...closed.map(({ sessionId, title, url }) => ({ sessionId, title, url, batch })),
+  );
+  // Chaque fermeture relance le décompte pour toute la liste.
+  expiresAt = Date.now() + DURATION_MS;
+  lastWindowId = windowId;
+  await render(windowId, { fallback: true });
+};
+
+const restoreTabs = async (tabs) => {
+  const restored = new Set(tabs.map((tab) => tab.sessionId));
+  // Sans passer par activePending : le décompte du bandeau est en pause tant
+  // que la souris est dessus, et un clic doit garder les autres lignes.
+  pending = pending.filter((tab) => !restored.has(tab.sessionId));
+  if (pending.length) expiresAt = Date.now() + DURATION_MS;
+  for (const { sessionId, url } of tabs) await restoreTab(sessionId, url);
+  await render(lastWindowId, { fallback: false });
 };
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   // Fenêtre entière fermée : rien à faire.
   if (removeInfo.isWindowClosing) return;
 
+  // Plusieurs onglets d'un coup ("Fermer les autres onglets", etc.) : un seul
+  // geste, donc une seule ligne dans le bandeau.
   const now = Date.now();
-  const isBulk = now - lastRemovedAt < BULK_WINDOW_MS;
+  if (now - lastRemovedAt >= BULK_WINDOW_MS) currentBatch += 1;
   lastRemovedAt = now;
-  const current = ++generation;
+  if (tabId === toastTabId) toastTabId = null;
 
-  // Plusieurs onglets d'un coup ("Fermer les autres onglets", etc.) :
-  // c'est une action volontaire, on ne propose rien.
-  if (isBulk) {
-    hidePrompt();
-    return;
-  }
-  promptForClosedTab(removeInfo.windowId, current);
+  const batch = currentBatch;
+  enqueue(() => collectClosedTabs(removeInfo.windowId, batch));
 });
 
-chrome.runtime.onMessage.addListener((message) => {
-  if (message?.type === 'restore-closed-tab') restoreTab(message.sessionId, message.url);
+// Changement d'onglet sans avoir répondu : le bandeau suit, avec le temps qu'il lui reste.
+chrome.tabs.onActivated.addListener(({ windowId }) => {
+  enqueue(() => {
+    if (!activePending().length) return;
+    lastWindowId = windowId;
+    return render(windowId, { fallback: false });
+  });
+});
+
+// Page de l'onglet actif (re)chargée pendant un décompte, par exemple un onglet
+// tout juste rouvert : on y remet le bandeau.
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status !== 'complete' || !tab.active || tab.windowId !== lastWindowId) return;
+  enqueue(() => {
+    if (activePending().length) return render(tab.windowId, { fallback: false });
+  });
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === 'get-closed-tabs') {
+    sendResponse(currentState());
+  } else if (message?.type === 'restore-closed-tabs') {
+    enqueue(() => restoreTabs(message.tabs));
+  } else if (message?.type === 'dismiss-closed-tabs') {
+    enqueue(() => {
+      pending = [];
+      return hidePrompt();
+    });
+  } else if (message?.type === 'closed-tabs-expired') {
+    enqueue(() => {
+      // Un onglet fermé à l'instant a pu relancer le décompte entre-temps.
+      if (Date.now() < expiresAt - 250) return;
+      pending = [];
+      return hidePrompt();
+    });
+  }
 });
 
 chrome.runtime.onInstalled.addListener(updateBadge);

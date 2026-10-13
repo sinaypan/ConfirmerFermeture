@@ -1,24 +1,52 @@
-const sessionId = new URLSearchParams(location.search).get('sid');
-let closedTab = null;
+// Le même bandeau que dans la page (banner.js), dans une petite fenêtre : pour
+// les pages où Chrome n'accepte pas de script (nouvel onglet, chrome://...).
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(closedTabsBanner.CSS);
+document.adoptedStyleSheets = [sheet];
 
-const keepTab = async () => {
-  try {
-    await chrome.sessions.restore(sessionId);
-  } catch {
-    // Entrée expirée dans les onglets récemment fermés : on rouvre l'adresse.
-    if (closedTab?.url) await chrome.tabs.create({ url: closedTab.url });
-  }
-  window.close();
+// La fenêtre se ferme une fois le message parti, pas avant.
+const answer = (message) =>
+  chrome.runtime
+    .sendMessage(message)
+    .catch(() => {})
+    .finally(() => window.close());
+
+const dismiss = () => answer({ type: 'dismiss-closed-tabs' });
+
+// La fenêtre prend la hauteur du bandeau, qui dépend du nombre de lignes.
+const fitWindow = async (toast) => {
+  const frame = window.outerHeight - window.innerHeight;
+  const { id } = await chrome.windows.getCurrent();
+  await chrome.windows.update(id, { height: Math.ceil(toast.getBoundingClientRect().height) + frame });
 };
 
-document.getElementById('keep').addEventListener('click', keepTab);
-document.getElementById('close').addEventListener('click', () => window.close());
+const render = (state) => {
+  if (!state?.rows.length) {
+    window.close();
+    return;
+  }
+  const toast = closedTabsBanner.build(
+    state,
+    {
+      restore: (tabs) => answer({ type: 'restore-closed-tabs', tabs }),
+      dismiss,
+      expire: () => answer({ type: 'closed-tabs-expired' }),
+    },
+    { animate: false },
+  );
+  document.body.querySelector('.toast')?.remove();
+  document.body.prepend(toast);
+  toast.querySelector('.restore').focus();
+  // Hauteur refusée par Chrome (fenêtre en partie hors écran) : on garde la taille actuelle.
+  fitWindow(toast).catch(() => {});
+};
 
 window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') keepTab();
+  if (event.key === 'Escape') dismiss();
 });
 
-// Cliquer ailleurs = on passe à autre chose, la fermeture est confirmée.
+// Cliquer ailleurs = on passe à autre chose. La liste reste proposée : elle
+// réapparaîtra en bandeau si on change d'onglet avant la fin du décompte.
 // On attend d'avoir eu le focus une fois pour ne pas se fermer à l'ouverture.
 let hadFocus = document.hasFocus();
 window.addEventListener('focus', () => {
@@ -28,13 +56,9 @@ window.addEventListener('blur', () => {
   if (hadFocus) window.close();
 });
 
-chrome.sessions.getRecentlyClosed().then((sessions) => {
-  closedTab = sessions.find((session) => session.tab?.sessionId === sessionId)?.tab ?? null;
-  if (!closedTab) return;
-  document.getElementById('title').textContent = closedTab.title || closedTab.url;
-  try {
-    document.getElementById('host').textContent = new URL(closedTab.url).host;
-  } catch {
-    // adresse non analysable : on n'affiche que le titre
-  }
+// Un onglet de plus fermé pendant que la fenêtre est ouverte : la liste se met à jour.
+chrome.runtime.onMessage.addListener((message) => {
+  if (message?.type === 'show-closed-tabs') render(message);
 });
+
+chrome.runtime.sendMessage({ type: 'get-closed-tabs' }).then(render);
