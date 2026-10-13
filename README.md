@@ -13,12 +13,12 @@ A Chrome extension that catches accidental tab closes. The moment you close a ta
 - **Follows you.** If you switch tabs before answering, the banner moves to the tab you are on with the time it has left.
 - **Gets out of the way.** The banner disappears on its own 7 seconds after the last tab you closed, and the countdown pauses while your mouse is over it.
 - **Only when it makes sense.** Nothing is offered when you close a whole window or an internal page such as a new tab.
-- **Works on protected pages too.** Where Chrome does not allow a banner (new tab, `chrome://` pages), the same banner opens in a small window instead.
+- **Works on protected pages too.** Where Chrome does not allow a banner (new tab, `chrome://` pages), the same list opens in the extension's own toolbar bubble instead, and the toolbar button shows how many tabs can be reopened.
 - **Easy to pause.** The toolbar button turns the extension on and off. A red "OFF" badge shows when it is paused.
 
 ![Three closed tabs listed in one banner](screenshots/toast-list.png)
 
-<img src="screenshots/popup.png" width="364" alt="The on/off popup">
+<img src="screenshots/popup-list.png" width="340" alt="Closed tabs listed in the toolbar bubble, on a Chrome page"> <img src="screenshots/popup.png" width="340" alt="The on/off switch">
 
 The interface is in French.
 

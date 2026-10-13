@@ -5,19 +5,40 @@
 globalThis.closedTabsBanner = (() => {
   const MAX_ROWS = 5;
 
+  // Les couleurs suivent le thème clair ou sombre du système ; l'orange est
+  // celui de l'icône de l'extension.
   const CSS = `
     .toast {
+      --card: #ffffff;
+      --text: #1c1c1e;
+      --muted: #8e8e93;
+      --line: rgba(60, 60, 67, 0.14);
+      --hover: rgba(60, 60, 67, 0.08);
+      --accent: #f08a00;
+      --accent-text: #ffffff;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(60, 60, 67, 0.12);
       position: relative;
       box-sizing: border-box;
       width: min(440px, calc(100vw - 24px));
       padding: 12px 10px 15px 14px;
       overflow: hidden;
-      border-radius: 12px;
-      background: #202124;
-      color: #e8eaed;
-      font: 13px/1.35 system-ui, "Segoe UI", sans-serif;
+      border-radius: 14px;
+      background: var(--card);
+      color: var(--text);
+      font: 13px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
       text-align: left;
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow);
+    }
+    @media (prefers-color-scheme: dark) {
+      .toast {
+        --card: #2c2c2e;
+        --text: #f2f2f7;
+        --line: rgba(235, 235, 245, 0.14);
+        --hover: rgba(235, 235, 245, 0.1);
+        --accent: #ff9f0a;
+        --accent-text: #1c1c1e;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(235, 235, 245, 0.12);
+      }
     }
     .toast.enter {
       animation: slide-in 0.16s ease-out;
@@ -31,7 +52,7 @@ globalThis.closedTabsBanner = (() => {
     .list {
       margin: 10px 4px 0 0;
       padding-top: 6px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid var(--line);
     }
     .row {
       min-height: 30px;
@@ -40,7 +61,7 @@ globalThis.closedTabsBanner = (() => {
       flex: none;
       width: 20px;
       height: 20px;
-      border-radius: 4px;
+      border-radius: 5px;
     }
     .row .icon {
       width: 16px;
@@ -52,7 +73,7 @@ globalThis.closedTabsBanner = (() => {
     }
     .label {
       font-size: 12px;
-      color: #9aa0a6;
+      color: var(--muted);
     }
     .title,
     .name {
@@ -70,7 +91,7 @@ globalThis.closedTabsBanner = (() => {
     .more {
       padding-top: 4px;
       font-size: 12px;
-      color: #9aa0a6;
+      color: var(--muted);
     }
     button {
       flex: none;
@@ -80,28 +101,29 @@ globalThis.closedTabsBanner = (() => {
       cursor: pointer;
     }
     button:focus-visible {
-      outline: 2px solid #8ab4f8;
+      outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
     .restore {
       padding: 7px 16px;
-      border-radius: 16px;
-      background: #8ab4f8;
-      color: #202124;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--accent-text);
       font-weight: 600;
     }
     .restore:hover {
-      background: #aecbfa;
+      filter: brightness(1.08);
     }
     .link {
       padding: 4px 10px;
-      border-radius: 12px;
+      border-radius: 999px;
       background: transparent;
-      color: #8ab4f8;
+      color: var(--accent);
       font-weight: 600;
     }
-    .link:hover {
-      background: rgba(138, 180, 248, 0.14);
+    .link:hover,
+    .dismiss:hover {
+      background: var(--hover);
     }
     .dismiss {
       width: 28px;
@@ -109,13 +131,9 @@ globalThis.closedTabsBanner = (() => {
       padding: 0;
       border-radius: 50%;
       background: transparent;
-      color: #9aa0a6;
+      color: var(--muted);
       font-size: 14px;
       line-height: 1;
-    }
-    .dismiss:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #e8eaed;
     }
     .timer {
       position: absolute;
@@ -123,7 +141,7 @@ globalThis.closedTabsBanner = (() => {
       bottom: 0;
       width: 100%;
       height: 3px;
-      background: #8ab4f8;
+      background: var(--accent);
       transform-origin: left;
       animation: countdown linear forwards;
     }
