@@ -38,6 +38,8 @@ Chrome does not let an extension hold a tab open while it closes. So this extens
 
 Everything stays on your computer. The extension has no server and makes no network requests.
 
+The banner is sealed off from the page it appears on: a site cannot read the title of the tab you just closed, click the banner, or learn its address. Nothing in the extension can be queried by websites.
+
 | Permission | Why it is needed |
 | --- | --- |
 | `sessions` | Find the tab that was just closed and restore it |

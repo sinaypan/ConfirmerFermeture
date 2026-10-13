@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Confirmer la fermeture d'onglet",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Propose de rouvrir un onglet dès qu'il est fermé, pour rattraper les fermetures accidentelles.",
   "permissions": ["sessions", "tabs", "storage", "scripting", "favicon"],
   "host_permissions": ["<all_urls>"],
@@ -13,12 +13,6 @@
       "matches": ["<all_urls>"],
       "js": ["banner.js", "toast.js"],
       "run_at": "document_start"
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["_favicon/*"],
-      "matches": ["<all_urls>"]
     }
   ],
   "icons": {

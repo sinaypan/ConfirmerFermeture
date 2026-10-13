@@ -158,15 +158,21 @@ globalThis.closedTabsBanner = (() => {
     return node;
   };
 
-  const favicon = (url) => {
-    const icon = element('img', 'icon');
-    icon.alt = '';
-    icon.addEventListener('error', () => icon.remove());
-    icon.src = chrome.runtime.getURL(`/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`);
-    return icon;
+  // L'icône arrive déjà lue par l'extension ({ type, data } en base64). Elle
+  // est dessinée dans un canvas : une balise image chargerait une adresse que
+  // la page pourrait voir, ou que ses règles de sécurité pourraient bloquer.
+  const favicon = (icon) => {
+    if (!icon) return null;
+    const canvas = element('canvas', 'icon');
+    canvas.width = canvas.height = 32;
+    const bytes = Uint8Array.from(atob(icon.data), (character) => character.charCodeAt(0));
+    createImageBitmap(new Blob([bytes], { type: icon.type }))
+      .then((bitmap) => canvas.getContext('2d').drawImage(bitmap, 0, 0, 32, 32))
+      .catch(() => canvas.remove());
+    return canvas;
   };
 
-  // state : { rows: [{ tabs: [{ sessionId, title, url }] }], remainingMs, durationMs }
+  // state : { rows: [{ tabs: [{ sessionId, title, icon }] }], remainingMs, durationMs }
   // handlers : { restore(tabs), dismiss(), expire() }
   const build = (state, handlers, { animate = true } = {}) => {
     const { rows, remainingMs, durationMs } = state;
@@ -188,8 +194,8 @@ globalThis.closedTabsBanner = (() => {
     const head = element('div', 'head');
     if (tabs.length === 1) {
       const text = element('div', 'text');
-      text.append(element('div', 'label', 'Onglet fermé'), element('div', 'title', tabs[0].title || tabs[0].url));
-      head.append(favicon(tabs[0].url), text, button('restore', 'Rouvrir', tabs), dismiss);
+      text.append(element('div', 'label', 'Onglet fermé'), element('div', 'title', tabs[0].title));
+      head.append(...[favicon(tabs[0].icon), text, button('restore', 'Rouvrir', tabs), dismiss].filter(Boolean));
     } else {
       head.append(
         element('div', 'text title', `${tabs.length} onglets fermés`),
@@ -204,10 +210,9 @@ globalThis.closedTabsBanner = (() => {
       const list = element('div', 'list');
       for (const row of rows.slice(0, MAX_ROWS)) {
         const [first] = row.tabs;
-        const name =
-          row.tabs.length === 1 ? first.title || first.url : `${row.tabs.length} onglets fermés ensemble`;
+        const name = row.tabs.length === 1 ? first.title : `${row.tabs.length} onglets fermés ensemble`;
         const line = element('div', 'row');
-        line.append(favicon(first.url), element('div', 'name', name), button('link', 'Rouvrir', row.tabs));
+        line.append(...[favicon(first.icon), element('div', 'name', name), button('link', 'Rouvrir', row.tabs)].filter(Boolean));
         list.append(line);
       }
       const hidden = rows.slice(MAX_ROWS).flatMap((row) => row.tabs).length;

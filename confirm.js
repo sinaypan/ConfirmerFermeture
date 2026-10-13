@@ -28,7 +28,7 @@ const render = (state) => {
   const toast = closedTabsBanner.build(
     state,
     {
-      restore: (tabs) => answer({ type: 'restore-closed-tabs', tabs }),
+      restore: (tabs) => answer({ type: 'restore-closed-tabs', sessionIds: tabs.map((tab) => tab.sessionId) }),
       dismiss,
       expire: () => answer({ type: 'closed-tabs-expired' }),
     },

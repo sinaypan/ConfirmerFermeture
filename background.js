@@ -14,7 +14,7 @@ const MAX_AGE_S = 5;
 const MAX_ASKED_IDS = 100;
 const RESTORABLE = /^(https?|file):/;
 
-// Onglets proposés, du plus récent au plus ancien : { sessionId, title, url, batch }.
+// Onglets proposés, du plus récent au plus ancien : { sessionId, title, url, icon, batch }.
 // Cet état disparaît si le service worker s'endort, ce qui demande bien plus
 // d'inactivité que la durée d'un décompte.
 let pending = [];
@@ -43,6 +43,19 @@ const restoreTab = (sessionId, url) =>
     if (url) chrome.tabs.create({ url });
   });
 
+// L'icône du site, lue ici et transmise telle quelle au bandeau. La page où
+// il s'affiche n'a ainsi aucune adresse d'extension à charger, et aucun site
+// ne peut interroger les icônes de l'extension.
+const faviconOf = async (url) => {
+  try {
+    const response = await fetch(chrome.runtime.getURL(`/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`));
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    return { type: response.headers.get('content-type') || 'image/png', data: btoa(String.fromCharCode(...bytes)) };
+  } catch {
+    return null;
+  }
+};
+
 const activePending = () => {
   if (Date.now() >= expiresAt) pending = [];
   return pending;
@@ -51,7 +64,8 @@ const activePending = () => {
 // Une ligne par onglet ; les onglets fermés d'un même geste partagent une ligne.
 const currentState = () => {
   const rows = [];
-  for (const { batch, ...tab } of activePending()) {
+  // L'adresse reste ici : le bandeau ne reçoit que ce qu'il affiche.
+  for (const { batch, url, ...tab } of activePending()) {
     const last = rows.at(-1);
     if (last?.batch === batch) last.tabs.push(tab);
     else rows.push({ batch, tabs: [tab] });
@@ -171,8 +185,9 @@ const collectClosedTabs = async (windowId, batch) => {
   await chrome.storage.session.set({
     askedIds: [...askedIds, ...closed.map((tab) => tab.sessionId)].slice(-MAX_ASKED_IDS),
   });
+  const icons = await Promise.all(closed.map((tab) => faviconOf(tab.url)));
   activePending().unshift(
-    ...closed.map(({ sessionId, title, url }) => ({ sessionId, title, url, batch })),
+    ...closed.map(({ sessionId, title, url }, index) => ({ sessionId, title: title || url, url, icon: icons[index], batch })),
   );
   // Chaque fermeture relance le décompte pour toute la liste.
   expiresAt = Date.now() + DURATION_MS;
@@ -180,11 +195,14 @@ const collectClosedTabs = async (windowId, batch) => {
   await render(windowId, { fallback: true });
 };
 
-const restoreTabs = async (tabs) => {
-  const restored = new Set(tabs.map((tab) => tab.sessionId));
+// Le bandeau ne désigne les onglets que par leur identifiant : seuls ceux que
+// l'extension a proposés sont rouverts, à l'adresse qu'elle a relevée elle-même.
+const restoreTabs = async (sessionIds) => {
+  const wanted = new Set(sessionIds);
   // Sans passer par activePending : le décompte du bandeau est en pause tant
   // que la souris est dessus, et un clic doit garder les autres lignes.
-  pending = pending.filter((tab) => !restored.has(tab.sessionId));
+  const tabs = pending.filter((tab) => wanted.has(tab.sessionId));
+  pending = pending.filter((tab) => !wanted.has(tab.sessionId));
   if (pending.length) expiresAt = Date.now() + DURATION_MS;
   for (const { sessionId, url } of tabs) await restoreTab(sessionId, url);
   await render(lastWindowId, { fallback: false });
@@ -227,7 +245,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === 'get-closed-tabs') {
     sendResponse(currentState());
   } else if (message?.type === 'restore-closed-tabs') {
-    enqueue(() => restoreTabs(message.tabs));
+    const sessionIds = Array.isArray(message.sessionIds) ? message.sessionIds.map(String) : [];
+    enqueue(() => restoreTabs(sessionIds));
   } else if (message?.type === 'dismiss-closed-tabs') {
     enqueue(() => {
       pending = [];

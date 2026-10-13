@@ -33,7 +33,9 @@
       host.style.setProperty(property, value, 'important');
     }
 
-    const root = host.attachShadow({ mode: 'open' });
+    // Fermé : les scripts de la page ne peuvent ni lire le bandeau (le titre
+    // d'un onglet fermé ne regarde pas le site affiché) ni cliquer dedans.
+    const root = host.attachShadow({ mode: 'closed' });
     const sheet = new CSSStyleSheet();
     sheet.replaceSync(closedTabsBanner.CSS);
     root.adoptedStyleSheets = [sheet];
@@ -42,7 +44,7 @@
       closedTabsBanner.build(
         state,
         {
-          restore: (tabs) => answer({ type: 'restore-closed-tabs', tabs }),
+          restore: (tabs) => answer({ type: 'restore-closed-tabs', sessionIds: tabs.map((tab) => tab.sessionId) }),
           dismiss: () => answer({ type: 'dismiss-closed-tabs' }),
           expire: () => answer({ type: 'closed-tabs-expired' }),
         },
