@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Tab-Schließen rückgängig"
+  },
+  "extDesc": {
+    "message": "Bietet an, einen Tab sofort nach dem Schließen wieder zu öffnen – gegen versehentliches Schließen."
+  },
+  "popupLabel": {
+    "message": "Wiederöffnen anbieten"
+  },
+  "statusOn": {
+    "message": "Beim Schließen eines Tabs erscheint ein Hinweis „Wieder öffnen“. Auf Chrome-Seiten werden geschlossene Tabs hier angeboten."
+  },
+  "statusOff": {
+    "message": "Pausiert: kein Hinweis beim Schließen eines Tabs."
+  },
+  "badgeOff": {
+    "message": "AUS"
+  },
+  "dismiss": {
+    "message": "Schließen"
+  },
+  "tabClosed": {
+    "message": "Tab geschlossen"
+  },
+  "reopen": {
+    "message": "Wieder öffnen"
+  },
+  "reopenAll": {
+    "message": "Alle wieder öffnen"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ Tab geschlossen",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ Tabs geschlossen",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ Tab geschlossen",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ Tabs zusammen geschlossen",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ $COUNT$ weiterer",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$ weitere",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

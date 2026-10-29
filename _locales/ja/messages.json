@@ -1,0 +1,56 @@
+{
+  "extName": {
+    "message": "タブを閉じたのを元に戻す"
+  },
+  "extDesc": {
+    "message": "タブを閉じた瞬間に再度開くか尋ね、うっかり閉じたタブを取り戻せます。"
+  },
+  "popupLabel": {
+    "message": "再度開くか尋ねる"
+  },
+  "statusOn": {
+    "message": "タブを閉じると「再度開く」バナーが表示されます。Chrome のページでは、閉じたタブはここに表示されます。"
+  },
+  "statusOff": {
+    "message": "一時停止中：タブを閉じてもバナーは表示されません。"
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "閉じる"
+  },
+  "tabClosed": {
+    "message": "タブを閉じました"
+  },
+  "reopen": {
+    "message": "再度開く"
+  },
+  "reopenAll": {
+    "message": "すべて再度開く"
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ 個のタブを閉じました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ 個のタブをまとめて閉じました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ ほか $COUNT$ 個",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

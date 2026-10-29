@@ -20,7 +20,7 @@ A Chrome extension that catches accidental tab closes (called *Confirmer la ferm
 
 <img src="screenshots/popup-list.png" width="340" alt="Closed tabs listed in the toolbar bubble, on a Chrome page"> <img src="screenshots/popup.png" width="340" alt="The on/off switch">
 
-The interface follows the language of Chrome: English by default, French when Chrome is set to French.
+The interface follows the language of Chrome: English by default, and also French, Spanish, Brazilian Portuguese, German, Italian, Russian, Turkish, Arabic, Japanese, Korean and Simplified Chinese.
 
 ## Install
 

@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Deshacer cierre de pestaña"
+  },
+  "extDesc": {
+    "message": "Ofrece reabrir una pestaña en cuanto se cierra, para recuperar los cierres por error."
+  },
+  "popupLabel": {
+    "message": "Ofrecer reabrir"
+  },
+  "statusOn": {
+    "message": "Al cerrar una pestaña aparece un aviso «Reabrir». En las páginas de Chrome, las pestañas cerradas se ofrecen aquí."
+  },
+  "statusOff": {
+    "message": "En pausa: no aparece ningún aviso al cerrar una pestaña."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "Descartar"
+  },
+  "tabClosed": {
+    "message": "Pestaña cerrada"
+  },
+  "reopen": {
+    "message": "Reabrir"
+  },
+  "reopenAll": {
+    "message": "Reabrir todas"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ pestaña cerrada",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ pestañas cerradas",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ pestaña cerrada",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ pestañas cerradas a la vez",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ $COUNT$ más",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$ más",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

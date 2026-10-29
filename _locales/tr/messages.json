@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Sekme Kapatmayı Geri Al"
+  },
+  "extDesc": {
+    "message": "Bir sekme kapandığı anda yeniden açmayı önerir; yanlışlıkla kapatmaları kurtarır."
+  },
+  "popupLabel": {
+    "message": "Yeniden açmayı öner"
+  },
+  "statusOn": {
+    "message": "Bir sekmeyi kapattığınızda “Yeniden aç” bandı görünür. Chrome sayfalarında kapatılan sekmeler burada önerilir."
+  },
+  "statusOff": {
+    "message": "Duraklatıldı: sekme kapatıldığında bant görünmez."
+  },
+  "badgeOff": {
+    "message": "KAP"
+  },
+  "dismiss": {
+    "message": "Kapat"
+  },
+  "tabClosed": {
+    "message": "Sekme kapatıldı"
+  },
+  "reopen": {
+    "message": "Yeniden aç"
+  },
+  "reopenAll": {
+    "message": "Tümünü yeniden aç"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ sekme kapatıldı",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ sekme kapatıldı",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ sekme kapatıldı",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ sekme birlikte kapatıldı",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ $COUNT$ tane daha",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$ tane daha",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

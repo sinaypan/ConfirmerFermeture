@@ -1,0 +1,176 @@
+{
+  "extName": {
+    "message": "التراجع عن إغلاق علامة التبويب"
+  },
+  "extDesc": {
+    "message": "يعرض إعادة فتح علامة التبويب فور إغلاقها، لتدارك الإغلاق الخاطئ."
+  },
+  "popupLabel": {
+    "message": "اقتراح إعادة الفتح"
+  },
+  "statusOn": {
+    "message": "يظهر شريط «إعادة الفتح» عند إغلاق علامة تبويب. في صفحات Chrome تُعرض علامات التبويب المغلقة هنا."
+  },
+  "statusOff": {
+    "message": "متوقف مؤقتًا: لا يظهر أي شريط عند إغلاق علامة تبويب."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "تجاهل"
+  },
+  "tabClosed": {
+    "message": "أُغلقت علامة التبويب"
+  },
+  "reopen": {
+    "message": "إعادة الفتح"
+  },
+  "reopenAll": {
+    "message": "إعادة فتح الكل"
+  },
+  "tabsClosed_zero": {
+    "message": "لم تُغلق أي علامة تبويب",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_one": {
+    "message": "أُغلقت علامة تبويب واحدة",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_two": {
+    "message": "أُغلقت علامتا تبويب",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_few": {
+    "message": "أُغلقت $COUNT$ علامات تبويب",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_many": {
+    "message": "أُغلقت $COUNT$ علامة تبويب",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "أُغلقت $COUNT$ علامة تبويب",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_zero": {
+    "message": "لم تُغلق أي علامة تبويب",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "أُغلقت علامة تبويب واحدة",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_two": {
+    "message": "أُغلقت علامتا تبويب معًا",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_few": {
+    "message": "أُغلقت $COUNT$ علامات تبويب معًا",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_many": {
+    "message": "أُغلقت $COUNT$ علامة تبويب معًا",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "أُغلقت $COUNT$ علامة تبويب معًا",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_zero": {
+    "message": "",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ واحدة أخرى",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_two": {
+    "message": "+ اثنتان أخريان",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_few": {
+    "message": "+ $COUNT$ أخرى",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_many": {
+    "message": "+ $COUNT$ أخرى",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$ أخرى",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

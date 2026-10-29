@@ -1,0 +1,128 @@
+{
+  "extName": {
+    "message": "Отмена закрытия вкладки"
+  },
+  "extDesc": {
+    "message": "Предлагает снова открыть вкладку сразу после закрытия, чтобы исправить случайное закрытие."
+  },
+  "popupLabel": {
+    "message": "Предлагать открыть снова"
+  },
+  "statusOn": {
+    "message": "При закрытии вкладки появляется плашка «Открыть снова». На страницах Chrome закрытые вкладки предлагаются здесь."
+  },
+  "statusOff": {
+    "message": "Пауза: при закрытии вкладки ничего не появляется."
+  },
+  "badgeOff": {
+    "message": "ВЫКЛ"
+  },
+  "dismiss": {
+    "message": "Скрыть"
+  },
+  "tabClosed": {
+    "message": "Вкладка закрыта"
+  },
+  "reopen": {
+    "message": "Открыть снова"
+  },
+  "reopenAll": {
+    "message": "Открыть все"
+  },
+  "tabsClosed_one": {
+    "message": "Закрыта $COUNT$ вкладка",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_few": {
+    "message": "Закрыто $COUNT$ вкладки",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_many": {
+    "message": "Закрыто $COUNT$ вкладок",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "Закрыто вкладок: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "Закрыта $COUNT$ вкладка",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_few": {
+    "message": "Вместе закрыто $COUNT$ вкладки",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_many": {
+    "message": "Вместе закрыто $COUNT$ вкладок",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "Вместе закрыто вкладок: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "и ещё $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_few": {
+    "message": "и ещё $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_many": {
+    "message": "и ещё $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "и ещё $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

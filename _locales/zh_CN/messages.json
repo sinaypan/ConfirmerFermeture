@@ -1,0 +1,56 @@
+{
+  "extName": {
+    "message": "撤销关闭标签页"
+  },
+  "extDesc": {
+    "message": "标签页一关闭就提示重新打开，挽回误关的标签页。"
+  },
+  "popupLabel": {
+    "message": "提示重新打开"
+  },
+  "statusOn": {
+    "message": "关闭标签页时会出现“重新打开”横幅。在 Chrome 页面上，关闭的标签页会显示在这里。"
+  },
+  "statusOff": {
+    "message": "已暂停：关闭标签页时不显示横幅。"
+  },
+  "badgeOff": {
+    "message": "关"
+  },
+  "dismiss": {
+    "message": "忽略"
+  },
+  "tabClosed": {
+    "message": "标签页已关闭"
+  },
+  "reopen": {
+    "message": "重新打开"
+  },
+  "reopenAll": {
+    "message": "全部重新打开"
+  },
+  "tabsClosed_other": {
+    "message": "已关闭 $COUNT$ 个标签页",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "同时关闭了 $COUNT$ 个标签页",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ 另外 $COUNT$ 个",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Annulla chiusura scheda"
+  },
+  "extDesc": {
+    "message": "Propone di riaprire una scheda appena viene chiusa, per rimediare alle chiusure per sbaglio."
+  },
+  "popupLabel": {
+    "message": "Proponi di riaprire"
+  },
+  "statusOn": {
+    "message": "Quando chiudi una scheda compare un avviso «Riapri». Sulle pagine di Chrome, le schede chiuse sono proposte qui."
+  },
+  "statusOff": {
+    "message": "In pausa: nessun avviso quando chiudi una scheda."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "Ignora"
+  },
+  "tabClosed": {
+    "message": "Scheda chiusa"
+  },
+  "reopen": {
+    "message": "Riapri"
+  },
+  "reopenAll": {
+    "message": "Riapri tutte"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ scheda chiusa",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ schede chiuse",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ scheda chiusa",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ schede chiuse insieme",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ altra $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ altre $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

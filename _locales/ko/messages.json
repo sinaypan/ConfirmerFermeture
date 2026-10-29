@@ -1,0 +1,56 @@
+{
+  "extName": {
+    "message": "탭 닫기 취소"
+  },
+  "extDesc": {
+    "message": "탭을 닫는 순간 다시 열지 물어봐서 실수로 닫은 탭을 되살립니다."
+  },
+  "popupLabel": {
+    "message": "다시 열기 제안"
+  },
+  "statusOn": {
+    "message": "탭을 닫으면 \"다시 열기\" 배너가 나타납니다. Chrome 페이지에서 닫은 탭은 여기에 표시됩니다."
+  },
+  "statusOff": {
+    "message": "일시 중지됨: 탭을 닫아도 배너가 나타나지 않습니다."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "닫기"
+  },
+  "tabClosed": {
+    "message": "탭이 닫혔습니다"
+  },
+  "reopen": {
+    "message": "다시 열기"
+  },
+  "reopenAll": {
+    "message": "모두 다시 열기"
+  },
+  "tabsClosed_other": {
+    "message": "탭 $COUNT$개가 닫혔습니다",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "탭 $COUNT$개가 함께 닫혔습니다",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$개 더",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

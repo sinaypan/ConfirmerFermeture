@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Desfazer fechamento de guia"
+  },
+  "extDesc": {
+    "message": "Oferece reabrir uma guia assim que ela é fechada, para recuperar fechamentos acidentais."
+  },
+  "popupLabel": {
+    "message": "Oferecer reabrir"
+  },
+  "statusOn": {
+    "message": "Um aviso “Reabrir” aparece quando você fecha uma guia. Nas páginas do Chrome, as guias fechadas aparecem aqui."
+  },
+  "statusOff": {
+    "message": "Pausado: nenhum aviso quando uma guia é fechada."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "Dispensar"
+  },
+  "tabClosed": {
+    "message": "Guia fechada"
+  },
+  "reopen": {
+    "message": "Reabrir"
+  },
+  "reopenAll": {
+    "message": "Reabrir todas"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ guia fechada",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ guias fechadas",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ guia fechada",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ guias fechadas juntas",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}
