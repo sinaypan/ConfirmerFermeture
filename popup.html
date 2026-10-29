@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Confirmer la fermeture d'onglet</title>
+    <title data-i18n="extName">Undo Close Tab</title>
     <style>
       :root {
         color-scheme: light dark;
@@ -116,10 +116,11 @@
   <body>
     <div id="closed" hidden></div>
     <label>
-      <span>Proposer de rouvrir</span>
+      <span data-i18n="popupLabel"></span>
       <input type="checkbox" id="enabled" />
     </label>
     <p id="status"></p>
+    <script src="i18n.js"></script>
     <script src="banner.js"></script>
     <script src="popup.js"></script>
   </body>

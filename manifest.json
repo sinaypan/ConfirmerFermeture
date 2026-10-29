@@ -1,17 +1,31 @@
 {
   "manifest_version": 3,
-  "name": "Confirmer la fermeture d'onglet",
-  "version": "3.4.0",
-  "description": "Propose de rouvrir un onglet dès qu'il est fermé, pour rattraper les fermetures accidentelles.",
-  "permissions": ["sessions", "tabs", "storage", "scripting", "favicon"],
-  "host_permissions": ["<all_urls>"],
+  "name": "__MSG_extName__",
+  "version": "3.5.0",
+  "description": "__MSG_extDesc__",
+  "default_locale": "en",
+  "permissions": [
+    "sessions",
+    "tabs",
+    "storage",
+    "scripting",
+    "favicon"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["banner.js", "toast.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "banner.js",
+        "toast.js"
+      ],
       "run_at": "document_start"
     }
   ],
@@ -22,7 +36,7 @@
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "Confirmer la fermeture d'onglet",
+    "default_title": "__MSG_extName__",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

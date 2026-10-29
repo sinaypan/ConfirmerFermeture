@@ -1,9 +1,15 @@
-// Le bandeau "Onglet fermé · Rouvrir", commun à la page (toast.js) et à la
+// Le bandeau "Tab closed · Reopen" ("Onglet fermé · Rouvrir"), commun à la page (toast.js) et à la
 // petite fenêtre de secours (confirm.js). Une ligne par onglet fermé ; les
 // onglets fermés d'un même geste partagent une ligne.
 // Affectation plutôt que déclaration : le fichier peut être injecté deux fois.
 globalThis.closedTabsBanner = (() => {
   const MAX_ROWS = 5;
+
+  // Textes dans la langue de Chrome (_locales), pluriels selon la règle de la langue.
+  // Ce fichier tourne aussi dans les pages : il n'utilise pas i18n.js, qui touche au document.
+  const t = (key, ...subs) => chrome.i18n.getMessage(key, subs.map(String)) || key;
+  const plurals = new Intl.PluralRules(chrome.i18n.getUILanguage());
+  const tp = (key, count) => chrome.i18n.getMessage(`${key}_${plurals.select(count)}`, [String(count)]) || t(`${key}_other`, count);
 
   // Les couleurs suivent le thème clair ou sombre du système ; l'orange est
   // celui de l'icône de l'extension.
@@ -206,18 +212,18 @@ globalThis.closedTabsBanner = (() => {
     toast.setAttribute('role', 'status');
 
     const dismiss = element('button', 'dismiss', '✕');
-    dismiss.setAttribute('aria-label', 'Ignorer');
+    dismiss.setAttribute('aria-label', t('dismiss'));
     dismiss.addEventListener('click', handlers.dismiss);
 
     const head = element('div', 'head');
     if (tabs.length === 1) {
       const text = element('div', 'text');
-      text.append(element('div', 'label', 'Onglet fermé'), element('div', 'title', tabs[0].title));
-      head.append(...[favicon(tabs[0].icon), text, button('restore', 'Rouvrir', tabs), dismiss].filter(Boolean));
+      text.append(element('div', 'label', t('tabClosed')), element('div', 'title', tabs[0].title));
+      head.append(...[favicon(tabs[0].icon), text, button('restore', t('reopen'), tabs), dismiss].filter(Boolean));
     } else {
       head.append(
-        element('div', 'text title', `${tabs.length} onglets fermés`),
-        button('restore', 'Tout rouvrir', tabs),
+        element('div', 'text title', tp('tabsClosed', tabs.length)),
+        button('restore', t('reopenAll'), tabs),
         dismiss,
       );
     }
@@ -228,13 +234,13 @@ globalThis.closedTabsBanner = (() => {
       const list = element('div', 'list');
       for (const row of rows.slice(0, MAX_ROWS)) {
         const [first] = row.tabs;
-        const name = row.tabs.length === 1 ? first.title : `${row.tabs.length} onglets fermés ensemble`;
+        const name = row.tabs.length === 1 ? first.title : tp('closedTogether', row.tabs.length);
         const line = element('div', 'row');
-        line.append(...[favicon(first.icon), element('div', 'name', name), button('link', 'Rouvrir', row.tabs)].filter(Boolean));
+        line.append(...[favicon(first.icon), element('div', 'name', name), button('link', t('reopen'), row.tabs)].filter(Boolean));
         list.append(line);
       }
       const hidden = rows.slice(MAX_ROWS).flatMap((row) => row.tabs).length;
-      if (hidden) list.append(element('div', 'more', `+ ${hidden} ${hidden === 1 ? 'autre' : 'autres'}`));
+      if (hidden) list.append(element('div', 'more', tp('more', hidden)));
       toast.append(list);
     }
 

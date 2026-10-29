@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Confirmer la fermeture d'onglet"
+  },
+  "extDesc": {
+    "message": "Propose de rouvrir un onglet dès qu'il est fermé, pour rattraper les fermetures accidentelles."
+  },
+  "popupLabel": {
+    "message": "Proposer de rouvrir"
+  },
+  "statusOn": {
+    "message": "Un bandeau « Rouvrir » s'affiche quand vous fermez un onglet. Sur les pages de Chrome, ils sont proposés ici."
+  },
+  "statusOff": {
+    "message": "Protection en pause : aucun bandeau à la fermeture d'un onglet."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "Ignorer"
+  },
+  "tabClosed": {
+    "message": "Onglet fermé"
+  },
+  "reopen": {
+    "message": "Rouvrir"
+  },
+  "reopenAll": {
+    "message": "Tout rouvrir"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ onglet fermé",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ onglets fermés",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ onglet fermé",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ onglets fermés ensemble",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ $COUNT$ autre",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$ autres",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

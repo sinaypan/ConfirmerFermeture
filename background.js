@@ -38,7 +38,7 @@ const updateBadge = async () => {
   const { enabled } = await chrome.storage.local.get({ enabled: true });
   const waiting = toastTabId === null ? activePending().length : 0;
   await chrome.action.setBadgeBackgroundColor({ color: enabled ? '#1a73e8' : '#b3261e' });
-  await chrome.action.setBadgeText({ text: enabled ? (waiting ? String(waiting) : '') : 'OFF' });
+  await chrome.action.setBadgeText({ text: enabled ? (waiting ? String(waiting) : '') : chrome.i18n.getMessage('badgeOff') });
 };
 
 const restoreTab = (sessionId, url) =>

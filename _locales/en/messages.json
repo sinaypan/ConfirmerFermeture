@@ -1,0 +1,80 @@
+{
+  "extName": {
+    "message": "Undo Close Tab"
+  },
+  "extDesc": {
+    "message": "Offers to reopen a tab the moment it is closed, to catch accidental closes."
+  },
+  "popupLabel": {
+    "message": "Offer to reopen"
+  },
+  "statusOn": {
+    "message": "A “Reopen” banner shows up when you close a tab. On Chrome pages, closed tabs are offered here."
+  },
+  "statusOff": {
+    "message": "Paused: no banner when a tab is closed."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "dismiss": {
+    "message": "Dismiss"
+  },
+  "tabClosed": {
+    "message": "Tab closed"
+  },
+  "reopen": {
+    "message": "Reopen"
+  },
+  "reopenAll": {
+    "message": "Reopen all"
+  },
+  "tabsClosed_one": {
+    "message": "$COUNT$ tab closed",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsClosed_other": {
+    "message": "$COUNT$ tabs closed",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_one": {
+    "message": "$COUNT$ tab closed",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTogether_other": {
+    "message": "$COUNT$ tabs closed together",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_one": {
+    "message": "+ $COUNT$ more",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "more_other": {
+    "message": "+ $COUNT$ more",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  }
+}

@@ -4,9 +4,7 @@ const closed = document.getElementById('closed');
 
 const render = (enabled) => {
   checkbox.checked = enabled;
-  status.textContent = enabled
-    ? 'Un bandeau « Rouvrir » s\'affiche quand vous fermez un onglet. Sur les pages de Chrome, ils sont proposés ici.'
-    : 'Protection en pause : aucun bandeau à la fermeture d\'un onglet.';
+  status.textContent = t(enabled ? 'statusOn' : 'statusOff');
 };
 
 chrome.storage.local.get({ enabled: true }, ({ enabled }) => render(enabled));

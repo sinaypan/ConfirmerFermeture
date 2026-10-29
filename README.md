@@ -1,15 +1,15 @@
 <img src="icons/icon128.png" width="88" alt="">
 
-# Confirmer la fermeture d'onglet
+# Undo Close Tab
 
-A Chrome extension that catches accidental tab closes. The moment you close a tab, a banner offers to bring it back.
+A Chrome extension that catches accidental tab closes (called *Confirmer la fermeture d'onglet* in French). The moment you close a tab, a banner offers to bring it back.
 
 ![The "tab closed" banner on a page](screenshots/toast.png)
 
 ## What it does
 
-- **One click to undo.** When a tab closes, a banner appears at the top of the page you land on: "Onglet fermé · Rouvrir". Click **Rouvrir** and the tab returns to where it was, with its back and forward history.
-- **Several tabs, one banner.** Close a few tabs in a row and each one gets its own line with its own **Rouvrir** button, newest first, plus **Tout rouvrir** to bring them all back. Tabs closed in a single gesture ("Close other tabs") share one line.
+- **One click to undo.** When a tab closes, a banner appears at the top of the page you land on: "Tab closed · Reopen". Click **Reopen** and the tab returns to where it was, with its back and forward history.
+- **Several tabs, one banner.** Close a few tabs in a row and each one gets its own line with its own **Reopen** button, newest first, plus **Reopen all** to bring them all back. Tabs closed in a single gesture ("Close other tabs") share one line.
 - **Follows you.** If you switch tabs before answering, the banner moves to the tab you are on with the time it has left.
 - **Gets out of the way.** The banner disappears on its own 7 seconds after the last tab you closed, and the countdown pauses while your mouse is over it.
 - **Only when it makes sense.** Nothing is offered when you close a whole window or an internal page such as a new tab.
@@ -20,7 +20,7 @@ A Chrome extension that catches accidental tab closes. The moment you close a ta
 
 <img src="screenshots/popup-list.png" width="340" alt="Closed tabs listed in the toolbar bubble, on a Chrome page"> <img src="screenshots/popup.png" width="340" alt="The on/off switch">
 
-The interface is in French.
+The interface follows the language of Chrome: English by default, French when Chrome is set to French.
 
 ## Install
 
